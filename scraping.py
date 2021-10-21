@@ -12,13 +12,14 @@ def scrape_all():
 
     news_title, news_paragraph = mars_news(browser)
 
-# Run all scraping functions and store results in dictionary
+   # Run all scraping functions and store results in dictionary
     data = {
           "news_title": news_title,
           "news_paragraph": news_paragraph,
           "featured_image": featured_image(browser),
           "facts": mars_facts(),
-          "last_modified": dt.datetime.now()
+          "last_modified": dt.datetime.now(),
+          "mars_hemispheres": mars_hemispheres(browser)
     }
 
  # Stop webdriver and return data
@@ -29,7 +30,7 @@ def mars_news(browser):
 
     # Scrape Mars News
     # Visit the mars nasa news site
-    url = 'https://redplanetscience.com/'
+    url = 'https://data-class-mars.s3.amazonaws.com/Mars/index.html'
     browser.visit(url)
 
     # Optional delay for loading the page
@@ -55,7 +56,7 @@ def mars_news(browser):
 # Featured Images
 def featured_image(browser):
     # Visit URL
-    url = 'https://spaceimages-mars.com'
+    url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html'
     browser.visit(url)
 
     # Find and click the full image button
@@ -75,7 +76,7 @@ def featured_image(browser):
         return None
 
     # Use the base url to create an absolute url
-    img_url = f'https://spaceimages-mars.com/{img_url_rel}'
+    img_url = f'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/{img_url_rel}'
 
     return img_url
 
@@ -84,7 +85,7 @@ def mars_facts():
     # Add try/except for error handling
     try:
         # Use 'read_html' to scrape the facts table into a dataframe
-        df = pd.read_html('https://galaxyfacts-mars.com')[0]
+        df = pd.read_html('https://data-class-mars-facts.s3.amazonaws.com/Mars_Facts/index.html')[0]
 
     except BaseException:
         return None
@@ -94,7 +95,53 @@ def mars_facts():
     df.set_index('Description', inplace=True)
 
     # Convert dataframe into HTML format, add bootstrap
-    return df.to_html()
+    return df.to_html(classes="table table-striped")
+
+# Hemisphere Images
+def mars_hemispheres(browser):
+
+# 1. Use browser to visit the URL 
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+
+# 2. Create a list to hold the images and titles.
+    hemisphere_image_urls = []
+
+# 3. Write code to retrieve the image urls and titles for each hemisphere.
+    html = browser.html
+    hemisphere_soup = soup(html, 'html.parser')
+
+    result_box = hemisphere_soup.find('div', class_="collapsible results")
+
+    links_with_text = []
+    for a in result_box.find_all('a', href=True): 
+            if a.text: 
+                links_with_text.append(a['href'])
+
+# for loop over the link of each sample picture
+    for i in range (4):
+        # Create an empty dict to hold the search results
+        hemisphere_image_results = {}
+        # Find link 
+        browser.visit(f'https://marshemispheres.com/{links_with_text[i]}')
+        
+        # Parse the new html page with soup
+        html = browser.html
+        sample_image_soup = soup(html, 'html.parser')
+        # Get the full image link
+        img_url = sample_image_soup.select_one("div.downloads ul li a").get('href')
+        # Get the full image title
+        img_title = sample_image_soup.select_one("h2.title").get_text()
+        # Add extracts to the results dict
+        hemisphere_image_results = {
+            'img_url': f'https://marshemispheres.com/{img_url}' ,
+            'title': img_title}
+        # Append results dict to hemisphere image urls list
+        hemisphere_image_urls.append(hemisphere_image_results)
+        # Return to main page
+        browser.back()
+
+    return hemisphere_image_urls
 
 if __name__ == "__main__":
     # If running as script, print scraped data
