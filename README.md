@@ -1,6 +1,6 @@
-# Mission-to-Mars!
+# Mission-to-Mars
 
-[Mission_to_mars](https://user-images.githubusercontent.com/87447639/138322709-893844ff-e2bb-4f48-a139-31d4f8e3ac21.PNG)
+![Mission_to_mars](https://user-images.githubusercontent.com/87447639/138322709-893844ff-e2bb-4f48-a139-31d4f8e3ac21.PNG)
 
 
 ## Website is responsive through mobile devices. (IPAD)
