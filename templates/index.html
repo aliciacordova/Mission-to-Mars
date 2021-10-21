@@ -10,10 +10,12 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     />
   </head>
-  <body>
+  <body style="background-color: rgb(134, 125, 125)">
     <div class="container">
       <!-- Add Jumbotron to Header -->
-      <div class="jumbotron text-center">
+      <div class="jumbotron text-center"
+          style="background-image: url('https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2020/04/mars_landscape/21916769-2-eng-GB/Mars_landscape_pillars.jpg'); 
+          background-size: cover; background-position: center; color: white"> 
         <h1>Mission to Mars</h1>
         <!-- Add a button to activate scraping script -->
         <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a></p>
@@ -23,9 +25,9 @@
         <div class="col-md-12">
           <div class="media">
             <div class="media-body">
-              <h2>Latest Mars News</h2>
-              <h4 class="media-heading">{{ mars.news_title }}</h4>
-              <p>{{ mars.news_paragraph }}</p>
+              <h2 style="color: white">Latest Mars News</h2>
+              <h4 class="media-heading" style="color: white">{{mars.news_title}}</h4>
+              <p style="color: white">{{mars.news_paragraph}}</p>
             </div>
           </div>
         </div>
@@ -33,10 +35,10 @@
       <!-- Section for Featured Image and Facts table -->
       <div class="row" id="mars-featured-image">
         <div class="col-md-8">
-          <h2>Featured Mars Image</h2>
-         <!-- if images is False/None/non-existent, then default to error message -->
+          <h2 style="color: white">Featured Mars Image</h2>
+         <!-- if images is False/None/non-existent, then default to error message src="{{mars.featured_image | default('static/images/error.png', true) }}"--> 
           <img
-            src="{{mars.featured_image | default('static/images/error.png', true) }}"
+            src="{{mars.featured_image | safe}}" 
             class="img-responsive"
             alt="Responsive image"
           />
@@ -44,7 +46,7 @@
         <div class="col-md-4">
           <!-- Mars Facts -->
           <div class="row" id="mars-facts">
-            <h4>Mars Facts</h4>
+            <h4 style="color: white">Mars Facts</h4>
             {{ mars.facts | safe }}
           </div>
         </div>
@@ -63,7 +65,7 @@
           alt = "Responsive Image"
         />
         <h5 class="image_title"
-        >{{ hemisphere.title }} </h5>
+        style="color: white">{{ hemisphere.title }} </h5>
         </div>         
         {% endfor %}
       </div>
