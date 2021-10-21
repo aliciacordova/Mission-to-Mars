@@ -30,7 +30,7 @@ def mars_news(browser):
 
     # Scrape Mars News
     # Visit the mars nasa news site
-    url = 'https://data-class-mars.s3.amazonaws.com/Mars/index.html'
+    url = 'https://redplanetscience.com'
     browser.visit(url)
 
     # Optional delay for loading the page
@@ -76,8 +76,7 @@ def featured_image(browser):
         return None
 
     # Use the base url to create an absolute url
-    img_url = f'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/{img_url_rel}'
-
+    img_url = f'https://spaceimages-mars.com/{img_url_rel}'
     return img_url
 
 # Mars Facts
@@ -85,8 +84,7 @@ def mars_facts():
     # Add try/except for error handling
     try:
         # Use 'read_html' to scrape the facts table into a dataframe
-        df = pd.read_html('https://data-class-mars-facts.s3.amazonaws.com/Mars_Facts/index.html')[0]
-
+        df = pd.read_html('https://galaxyfacts-mars.com')[0]
     except BaseException:
         return None
 
